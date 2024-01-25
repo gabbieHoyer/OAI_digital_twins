@@ -6,7 +6,7 @@ from scripts.statistics.sensitivity_analysis import ks_test_by_group_to_excel
 from scripts.cohort_matching.statistical_matching import perform_matching
 from scripts.cohort_matching.tsne_matching import perform_tsne, calculate_distances, find_closest_pairs  
 
-def main():
+def twin_match():
     base_path = '/content/drive/MyDrive/Colab_Notebooks/oai/TKR_twin/'
     all_clin = pd.read_csv(base_path + 'OAI_all_knees_data.csv')
     clean_oai = pd.read_csv(base_path + 'publish_dataframes/pca_modes_and_demos_all_timepoints_12082023.csv')
@@ -121,4 +121,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    twin_match()
