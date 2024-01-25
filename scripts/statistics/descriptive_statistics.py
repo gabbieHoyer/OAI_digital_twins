@@ -53,34 +53,30 @@ def calculate_and_save_group_stats(dataframe, group_column, group_names, numeric
 
 
 
-# before matcching
-# OA Incidence example usage
-oa_inc_before_match = pd.read_csv('publish_dataframes/oa_inc_multiple_imputation_filled.csv')
-numerical_cols = oa_inc_before_match.iloc[:,16:-110].columns
-categorical_cols = oa_inc_before_match.iloc[:,7:16].columns
-group_names = {0: 'Control', 1: 'OA_Inc Group'}
+# # before matcching
+# # OA Incidence example usage
+# oa_inc_before_match = pd.read_csv('publish_dataframes/oa_inc_multiple_imputation_filled.csv')
+# numerical_cols = oa_inc_before_match.iloc[:,16:-110].columns
+# categorical_cols = oa_inc_before_match.iloc[:,7:16].columns
+# group_names = {0: 'Control', 1: 'OA_Inc Group'}
+# calculate_and_save_group_stats(oa_inc_before_match, 'oa_prog', group_names, numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_before_matching_descriptive_statistics_output.xlsx")
 
-calculate_and_save_group_stats(oa_inc_before_match, 'oa_prog', group_names, numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_before_matching_descriptive_statistics_output.xlsx")
+# # TKR example usage
+# tkr_before_match = pd.read_csv('publish_dataframes/tkr_multiple_imputation_filled.csv')
+# numerical_cols = tkr_before_match.iloc[:,16:-110].columns
+# categorical_cols = tkr_before_match.iloc[:,7:16].columns
+# group_names = {0: 'Control', 1: 'TKR Group'}
+# calculate_and_save_group_stats(tkr_before_match, 'tkr', group_names, numerical_cols, categorical_cols, "publish_dataframes/TKR_before_matching_descriptive_statistics_output.xlsx")
 
-# TKR example usage
-tkr_before_match = pd.read_csv('publish_dataframes/tkr_multiple_imputation_filled.csv')
-numerical_cols = tkr_before_match.iloc[:,16:-110].columns
-categorical_cols = tkr_before_match.iloc[:,7:16].columns
-group_names = {0: 'Control', 1: 'TKR Group'}
+# # after matcching
+# # OA Incidence example usage
+# numerical_cols = oa_inc_matched_df.iloc[:,20:-110].columns
+# categorical_cols = oa_inc_matched_df.iloc[:,11:20].columns
+# group_names = {0: 'Control', 1: 'OA_Inc Group'}
+# calculate_and_save_group_stats(oa_inc_matched_df, 'oa_prog', group_names, numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_Twins_descriptive_statistics_output.xlsx")
 
-calculate_and_save_group_stats(tkr_before_match, 'tkr', group_names, numerical_cols, categorical_cols, "publish_dataframes/TKR_before_matching_descriptive_statistics_output.xlsx")
-
-# after matcching
-# OA Incidence example usage
-numerical_cols = oa_inc_matched_df.iloc[:,20:-110].columns
-categorical_cols = oa_inc_matched_df.iloc[:,11:20].columns
-group_names = {0: 'Control', 1: 'OA_Inc Group'}
-
-calculate_and_save_group_stats(oa_inc_matched_df, 'oa_prog', group_names, numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_Twins_descriptive_statistics_output.xlsx")
-
-# TKR example usage
-numerical_cols = tkr_matched_df.iloc[:,20:-110].columns
-categorical_cols = tkr_matched_df.iloc[:,11:20].columns
-group_names = {0: 'Control', 1: 'TKR Group'}
-
-calculate_and_save_group_stats(tkr_matched_df, 'tkr', group_names, numerical_cols, categorical_cols, "publish_dataframes/TKR_Twins_descriptive_statistics_output.xlsx")
+# # TKR example usage
+# numerical_cols = tkr_matched_df.iloc[:,20:-110].columns
+# categorical_cols = tkr_matched_df.iloc[:,11:20].columns
+# group_names = {0: 'Control', 1: 'TKR Group'}
+# calculate_and_save_group_stats(tkr_matched_df, 'tkr', group_names, numerical_cols, categorical_cols, "publish_dataframes/TKR_Twins_descriptive_statistics_output.xlsx")

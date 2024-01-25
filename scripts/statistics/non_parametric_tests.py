@@ -125,15 +125,14 @@ def calculate_nonparametric_stats_and_save(dataframe, target_column, numerical_c
 
 # After matching
 # OA Incidence example usage
-numerical_cols = oa_inc_matched_df.iloc[:,20:-110].columns.tolist()
-categorical_cols = oa_inc_matched_df.iloc[:,11:20].columns.tolist()
-calculate_nonparametric_stats_and_save(oa_inc_matched_df, 'oa_prog', numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_Twins_nonparametric_statistics_output.xlsx")
+# numerical_cols = oa_inc_matched_df.iloc[:,20:-110].columns.tolist()
+# categorical_cols = oa_inc_matched_df.iloc[:,11:20].columns.tolist()
+# calculate_nonparametric_stats_and_save(oa_inc_matched_df, 'oa_prog', numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_Twins_nonparametric_statistics_output.xlsx")
 
 # TKR example usage
-numerical_cols = tkr_matched_df.iloc[:,20:-110].columns.tolist()
-categorical_cols = tkr_matched_df.iloc[:,11:20].columns.tolist()
-calculate_nonparametric_stats_and_save(tkr_matched_df, 'tkr', numerical_cols, categorical_cols, "publish_dataframes/TKR_Twins_nonparametric_statistics_output.xlsx")
-
+# numerical_cols = tkr_matched_df.iloc[:,20:-110].columns.tolist()
+# categorical_cols = tkr_matched_df.iloc[:,11:20].columns.tolist()
+# calculate_nonparametric_stats_and_save(tkr_matched_df, 'tkr', numerical_cols, categorical_cols, "publish_dataframes/TKR_Twins_nonparametric_statistics_output.xlsx")
 
 
 # **********************************************************#
@@ -248,13 +247,13 @@ def perform_statistical_tests(dataframe, group_column, variable_columns_range, n
 
     return results_df
 
-# Example usage for oa_inc_matched_df
-non_norm_columns_oa_inc = oa_inc_matched_df.iloc[:,-110:].columns.tolist()
-results_df_oa_inc = perform_statistical_tests(oa_inc_matched_df, 'oa_prog', -110, non_norm_columns_oa_inc)
+# # Example usage for oa_inc_matched_df
+# non_norm_columns_oa_inc = oa_inc_matched_df.iloc[:,-110:].columns.tolist()
+# results_df_oa_inc = perform_statistical_tests(oa_inc_matched_df, 'oa_prog', -110, non_norm_columns_oa_inc)
 
-# Example usage for tkr_matched_df
-non_norm_columns_tkr = tkr_matched_df.iloc[:,-110:].columns.tolist()
-results_df_tkr = perform_statistical_tests(tkr_matched_df, 'tkr', -110, non_norm_columns_tkr)
+# # Example usage for tkr_matched_df
+# non_norm_columns_tkr = tkr_matched_df.iloc[:,-110:].columns.tolist()
+# results_df_tkr = perform_statistical_tests(tkr_matched_df, 'tkr', -110, non_norm_columns_tkr)
 
 # Optionally, save results to Excel
 # results_df_oa_inc.to_excel("publish_dataframes/OA_Inc_meanDifference_wilcoxon_hochbergCorrected_results.xlsx", index=False)

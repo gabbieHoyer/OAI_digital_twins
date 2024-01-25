@@ -1,31 +1,6 @@
 import pandas as pd
 from rpy2.robjects import r
 
-def prepare_dataframe_for_matching(dataframe, target_flag_name, covariates_range, id_column_name):
-    """
-    Prepares a DataFrame for matching by selecting the relevant columns.
-
-    Parameters:
-    dataframe (pd.DataFrame): The original DataFrame.
-    target_flag_name (str): The name of the column containing the target flag.
-    covariates_range (slice): The range of columns to be used as covariates.
-    id_column_name (str): The name of the column containing the ID.
-
-    Returns:
-    pd.DataFrame: A new DataFrame with the selected columns.
-    """
-
-    # Select the covariates and the target flag
-    covariates = dataframe.iloc[:, covariates_range]
-    target_flag = dataframe[target_flag_name]
-    id_column = dataframe[id_column_name]
-
-    # Create a new DataFrame with only the relevant columns
-    prepared_dataframe = pd.concat([id_column, target_flag, covariates], axis=1)
-
-    return prepared_dataframe
-
-
 def calculate_distance(input_dataframe, method='euclidean'):
     # Add logic to select only covariate columns if needed
     # Example: input_dataframe = input_dataframe.iloc[:, 2:]
@@ -104,3 +79,50 @@ def perform_matching(input_dataframe, target_column, output_csv, output_matched_
     matched_data_df.to_csv(output_csv, index=False)
 
     print("Matching process completed.")
+
+
+def find_closest_pairs(df, target_col, dist_df, id_col):
+    """
+    Identifies the closest pairs in the dataset.
+
+    :param df: Original DataFrame with target information.
+    :param target_col: Target column name.
+    :param dist_df: DataFrame with distances.
+    :param id_col: The column name that uniquely identifies each row.
+    :return: DataFrame with closest pair information.
+    """
+    target_ids = df[df[target_col] == 1][id_col].tolist()
+    progressing_dist = dist_df[target_ids]
+
+    # Creating Long Format DataFrame
+    progressing_long = progressing_dist.stack().reset_index().rename(columns={'level_0':'id','level_1':'pt2',0:'distance'})
+
+    # Merging with Target Column Information
+    target_vals = df[['id', target_col]]
+    target_long = progressing_long.merge(target_vals, on='id').rename(columns={'id':'pt1_id', 'pt2':'id', target_col: target_col + '_pt1'})
+
+    target_2pat = target_long.merge(target_vals, on='id').rename(columns={'id':'pt2_id', target_col: target_col + '_pt2'})
+
+    # Identifying Different Pairs
+    min_sort_target = (target_2pat.sort_values(['pt1_id','distance'], ascending=True)[['pt1_id','pt2_id','distance', target_col+'_pt1', target_col+'_pt2']])
+    min_sort_target['diff_pair'] = (min_sort_target[target_col+'_pt1'] != min_sort_target[target_col+'_pt2'])
+
+    # Finding the closest different pairs for each 'pt2_id'
+    closest_pairs = min_sort_target[min_sort_target['diff_pair']].sort_values('distance').groupby('pt2_id').first().reset_index()
+
+    # Dropping the 'diff_pair' column as it's no longer needed
+    closest_pairs = closest_pairs.drop('diff_pair', axis=1)
+
+    # Prepare for melting: Identify columns ending with '_id'
+    id_cols = [col for col in closest_pairs.columns if col.endswith('_id')]
+
+    # Melting the DataFrame to long format
+    twins_melt = pd.melt(closest_pairs, id_vars='distance', value_vars=id_cols, value_name='id')
+
+    # Assigning 'tkr' values based on the 'variable' column
+    twins_melt[target_col] = np.where(twins_melt['variable'] == 'pt1_id', 0, 1)
+
+    # Dropping the 'variable' column as it's no longer needed
+    twins_melt = twins_melt.drop('variable', axis=1)
+
+    return twins_melt

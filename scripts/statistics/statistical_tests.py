@@ -62,21 +62,21 @@ def perform_normality_tests(dataframe, group_column, column_range):
     return results
 
 
-oa_inc_numerical_results = perform_normality_tests(oa_inc_matched_df, 'oa_prog', (20, -110))
+# oa_inc_numerical_results = perform_normality_tests(oa_inc_matched_df, 'oa_prog', (20, -110))
+# tkr_numerical_results = perform_normality_tests(tkr_matched_df, 'tkr', (20, -110))
 
-tkr_numerical_results = perform_normality_tests(tkr_matched_df, 'tkr', (20, -110))
+# # Optionally, save the results to Excel files
+# oa_inc_numerical_results.to_excel('publish_dataframes/OA_Inc_demos_clinicalFactors_normality_tests_results.xlsx', index=False, engine='openpyxl')
+# tkr_numerical_results.to_excel('publish_dataframes/TKR_demos_clinicalFactors_normality_tests_results.xlsx', index=False, engine='openpyxl')
 
-# Optionally, save the results to Excel files
-oa_inc_numerical_results.to_excel('publish_dataframes/OA_Inc_demos_clinicalFactors_normality_tests_results.xlsx', index=False, engine='openpyxl')
-tkr_numerical_results.to_excel('publish_dataframes/TKR_demos_clinicalFactors_normality_tests_results.xlsx', index=False, engine='openpyxl')
-
-
+# ************************************************************************* #
 # Checking Normality and Homoscedasticity of Twin/Matched Subject imaging biomarker PC modes
-# Example usage for oa_inc_matched_df
-oa_inc_results = perform_normality_tests(oa_inc_matched_df, 'oa_prog', (-110, None))
 
-# Example usage for tkr_matched_df
-tkr_results = perform_normality_tests(tkr_matched_df, 'tkr', (-110, None))
+# Example usage for oa_inc_matched_df
+# oa_inc_results = perform_normality_tests(oa_inc_matched_df, 'oa_prog', (-110, None))
+
+# # Example usage for tkr_matched_df
+# tkr_results = perform_normality_tests(tkr_matched_df, 'tkr', (-110, None))
 
 # Optionally, save the results to Excel files
 # oa_inc_results.to_excel('publish_dataframes/OA_Inc_Clinical_Twin_PCA_variables_normality_tests_results.xlsx', index=False, engine='openpyxl')

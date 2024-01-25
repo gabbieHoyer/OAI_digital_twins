@@ -17,9 +17,6 @@ def calculate_effect_size_stats_and_save(dataframe, target_column, numerical_col
     group_control = dataframe[dataframe[target_column] == 0].reset_index(drop=True)
     group_treatment = dataframe[dataframe[target_column] == 1].reset_index(drop=True)
 
-    # Ensure equal sizes
-    # assert len(group_control) == len(group_treatment), "Groups are not paired correctly!"
-
     # Define named tuples for results
     NumericalTestResults = namedtuple('NumericalTestResults', ['column', 'biserial_corr', 'p_value', 'test_type'])
     CategoricalTestResults = namedtuple('CategoricalTestResults', ['column', 'association_stat', 'test_type'])
@@ -50,27 +47,27 @@ def calculate_effect_size_stats_and_save(dataframe, target_column, numerical_col
         categorical_results_df.to_excel(writer, sheet_name='Categorical_Statistics')
 
 
-# Before Matching
-# OA Incidence example usage
-oa_inc_before_match = pd.read_csv('publish_dataframes/oa_inc_multiple_imputation_filled.csv')
-numerical_cols = oa_inc_before_match.iloc[:,16:-110].columns.tolist()
-categorical_cols = oa_inc_before_match.iloc[:,7:16].columns.tolist()
-calculate_effect_size_stats_and_save(oa_inc_before_match, 'oa_prog', numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_Twins_before_matching_effectSize_statistics_output.xlsx")
+# # Before Matching
+# # OA Incidence example usage
+# oa_inc_before_match = pd.read_csv('publish_dataframes/oa_inc_multiple_imputation_filled.csv')
+# numerical_cols = oa_inc_before_match.iloc[:,16:-110].columns.tolist()
+# categorical_cols = oa_inc_before_match.iloc[:,7:16].columns.tolist()
+# calculate_effect_size_stats_and_save(oa_inc_before_match, 'oa_prog', numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_Twins_before_matching_effectSize_statistics_output.xlsx")
 
-# TKR example usage
-tkr_before_match = pd.read_csv('publish_dataframes/tkr_multiple_imputation_filled.csv')
-numerical_cols = tkr_before_match.iloc[:,16:-110].columns.tolist()
-categorical_cols = tkr_before_match.iloc[:,7:16].columns.tolist()
-calculate_effect_size_stats_and_save(tkr_before_match, 'tkr', numerical_cols, categorical_cols, "publish_dataframes/TKR_Twins_before_matching_effectSize_statistics_output.xlsx")
+# # TKR example usage
+# tkr_before_match = pd.read_csv('publish_dataframes/tkr_multiple_imputation_filled.csv')
+# numerical_cols = tkr_before_match.iloc[:,16:-110].columns.tolist()
+# categorical_cols = tkr_before_match.iloc[:,7:16].columns.tolist()
+# calculate_effect_size_stats_and_save(tkr_before_match, 'tkr', numerical_cols, categorical_cols, "publish_dataframes/TKR_Twins_before_matching_effectSize_statistics_output.xlsx")
 
 
-# After Matching
-# OA Incidence example usage
-numerical_cols = oa_inc_matched_df.iloc[:,20:-110].columns.tolist()
-categorical_cols = oa_inc_matched_df.iloc[:,11:20].columns.tolist()
-calculate_effect_size_stats_and_save(oa_inc_matched_df, 'oa_prog', numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_Twins_effectSize_statistics_output.xlsx")
+# # After Matching
+# # OA Incidence example usage
+# numerical_cols = oa_inc_matched_df.iloc[:,20:-110].columns.tolist()
+# categorical_cols = oa_inc_matched_df.iloc[:,11:20].columns.tolist()
+# calculate_effect_size_stats_and_save(oa_inc_matched_df, 'oa_prog', numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_Twins_effectSize_statistics_output.xlsx")
 
-# TKR example usage
-numerical_cols = tkr_matched_df.iloc[:,20:-110].columns.tolist()
-categorical_cols = tkr_matched_df.iloc[:,11:20].columns.tolist()
-calculate_effect_size_stats_and_save(tkr_matched_df, 'tkr', numerical_cols, categorical_cols, "publish_dataframes/TKR_Twins_effectSize_statistics_output.xlsx")
+# # TKR example usage
+# numerical_cols = tkr_matched_df.iloc[:,20:-110].columns.tolist()
+# categorical_cols = tkr_matched_df.iloc[:,11:20].columns.tolist()
+# calculate_effect_size_stats_and_save(tkr_matched_df, 'tkr', numerical_cols, categorical_cols, "publish_dataframes/TKR_Twins_effectSize_statistics_output.xlsx")
