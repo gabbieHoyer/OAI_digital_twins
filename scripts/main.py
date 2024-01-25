@@ -3,8 +3,8 @@ from scripts.data_processing import process_all_clin, filter_data_by_side_and_vi
 from scripts.data_processing import drop_rows_missing_pc_columns, drop_columns_with_missing_values, impute_by_group, scale_columns
 from scripts.data_processing import prepare_dataframe_for_matching
 from scripts.statistics.sensitivity_analysis import ks_test_by_group_to_excel
-from statistical_matching import perform_matching
-from tsne_matching import perform_tsne, calculate_distances, find_closest_pairs  
+from scripts.cohort_matching.statistical_matching import perform_matching
+from scripts.cohort_matching.tsne_matching import perform_tsne, calculate_distances, find_closest_pairs  
 
 def main():
     base_path = '/content/drive/MyDrive/Colab_Notebooks/oai/TKR_twin/'
