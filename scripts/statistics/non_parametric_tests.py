@@ -8,11 +8,56 @@ from scipy.stats import ttest_rel, false_discovery_control
 from scipy.stats import shapiro, anderson, wilcoxon, chi2_contingency, contingency, pointbiserialr
 
 from collections import namedtuple
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-# Set the random seed for reproducibility
-np.random.seed(42)
+def perform_normality_tests(dataframe, group_column, column_range):
+    # Conducting normality tests on your data to check the distribution assumptions
+    # Extracting groups
+    group_control = dataframe[dataframe[group_column] == 0].reset_index(drop=True)
+    group_treatment = dataframe[dataframe[group_column] == 1].reset_index(drop=True)
+
+    # Ensure equal sizes
+    assert len(group_control) == len(group_treatment), "Groups are not paired correctly!"
+
+    # Define a DataFrame to hold our results
+    results = pd.DataFrame(columns=['variable', 'shapiro_stat', 'shapiro_p', 'anderson_stat', 'anderson_critical_values', 'anderson_significance_level'])
+
+    # Determine the slicing range
+    if isinstance(column_range, tuple):
+        start, end = column_range
+        selected_columns = dataframe.iloc[:, start:end if end is not None else None].columns
+    elif isinstance(column_range, slice):
+        selected_columns = dataframe.iloc[:, column_range].columns
+    else:
+        raise ValueError("column_range must be a slice or a tuple")
+
+    # Loop through all variable columns
+    for col in selected_columns:
+        differences = group_treatment[col] - group_control[col]
+
+        # Drop NA values from differences
+        differences = differences.dropna()
+
+        # Shapiro-Wilk Test
+        shapiro_stat, shapiro_p = shapiro(differences)
+
+        # Anderson-Darling Test
+        anderson_result = anderson(differences)
+        anderson_stat = anderson_result.statistic
+        anderson_critical_values = anderson_result.critical_values
+        anderson_significance_level = anderson_result.significance_level
+
+        # Append results
+        results = results.append({
+            'variable': col,
+            'shapiro_stat': shapiro_stat,
+            'shapiro_p': shapiro_p,
+            'anderson_stat': anderson_stat,
+            'anderson_critical_values': anderson_critical_values,
+            'anderson_significance_level': anderson_significance_level
+        }, ignore_index=True)
+
+    return results
+
 
 def bootstrap_median_difference(treatment_col, control_col, n_bootstrap=1000, confidence_levels=[95, 99], seed=None):
     """
@@ -52,7 +97,7 @@ def bootstrap_median_difference(treatment_col, control_col, n_bootstrap=1000, co
     return ci_bounds
 
 
-def calculate_nonparametric_stats_and_save(dataframe, target_column, numerical_cols, categorical_cols, file_name):
+def calculate_nonparametric_stats_and_save(dataframe, target_column, continuous_cols, categorical_cols, output_dir):
     # Extracting groups
     group_control = dataframe[dataframe[target_column] == 0].reset_index(drop=True)
     group_treatment = dataframe[dataframe[target_column] == 1].reset_index(drop=True)
@@ -64,11 +109,11 @@ def calculate_nonparametric_stats_and_save(dataframe, target_column, numerical_c
     WilcoxonTestResults = namedtuple('WilcoxonTestResults', ['column', 'wilcoxon_stat', 'p_value', 'dof', 'ci_95_low', 'ci_95_high', 'ci_99_low', 'ci_99_high', 'test_type', 'median_diff', 'margin_of_err95', 'margin_of_err99', 'point_estimate_ci_95', 'point_estimate_ci_99'])
     CategoricalTestResults = namedtuple('CategoricalTestResults', ['column', 'chi2_stat', 'p_value', 'dof', 'expected', 'observed', 'test_type'])
 
-    numerical_results = []
+    continuous_results = []
     categorical_results = []
 
-    for col in numerical_cols + categorical_cols:
-        if col in numerical_cols:
+    for col in continuous_cols + categorical_cols:
+        if col in continuous_cols:
             # Drop any NaN values from consideration
             control_col = group_control[col].dropna()
             treatment_col = group_treatment[col].dropna()
@@ -99,7 +144,7 @@ def calculate_nonparametric_stats_and_save(dataframe, target_column, numerical_c
             formatted_ci_99 = f"{median_diff}, 99% CI: [{ci_bounds[99][0]}, {ci_bounds[99][1]}]"
 
             # Append results with bootstrapped confidence intervals
-            numerical_results.append(WilcoxonTestResults(col, stat, p_value, df,
+            continuous_results.append(WilcoxonTestResults(col, stat, p_value, df,
                                                         ci_bounds[95][0], ci_bounds[95][1],
                                                         ci_bounds[99][0], ci_bounds[99][1],
                                                         'wilcoxon', median_diff, margin_of_err95, margin_of_err99,
@@ -114,28 +159,16 @@ def calculate_nonparametric_stats_and_save(dataframe, target_column, numerical_c
             categorical_results.append(CategoricalTestResults(col, chi2_stat, p_value, dof, expected.tolist(), contingency_table.values.tolist(), 'chi-squared'))
 
     # Converting results into DataFrames
-    numerical_results_df = pd.DataFrame(numerical_results)
+    continuous_results_df = pd.DataFrame(continuous_results)
     categorical_results_df = pd.DataFrame(categorical_results)
 
     # Save the results to an Excel file
+    file_name = f'{output_dir}/{target_column}_nonparametric_statistics_output.xlsx'
     with pd.ExcelWriter(file_name, engine='xlsxwriter') as writer:
-        numerical_results_df.to_excel(writer, sheet_name='Numerical_Statistics')
+        continuous_results_df.to_excel(writer, sheet_name='continuous_Statistics')
         categorical_results_df.to_excel(writer, sheet_name='Categorical_Statistics')
 
 
-# After matching
-# OA Incidence example usage
-# numerical_cols = oa_inc_matched_df.iloc[:,20:-110].columns.tolist()
-# categorical_cols = oa_inc_matched_df.iloc[:,11:20].columns.tolist()
-# calculate_nonparametric_stats_and_save(oa_inc_matched_df, 'oa_prog', numerical_cols, categorical_cols, "publish_dataframes/OA_Inc_Twins_nonparametric_statistics_output.xlsx")
-
-# TKR example usage
-# numerical_cols = tkr_matched_df.iloc[:,20:-110].columns.tolist()
-# categorical_cols = tkr_matched_df.iloc[:,11:20].columns.tolist()
-# calculate_nonparametric_stats_and_save(tkr_matched_df, 'tkr', numerical_cols, categorical_cols, "publish_dataframes/TKR_Twins_nonparametric_statistics_output.xlsx")
-
-
-# **********************************************************#
 def perform_statistical_tests(dataframe, group_column, variable_columns_range, non_norm_columns):
     # Extracting groups
     group_control = dataframe[dataframe[group_column] == 0].reset_index(drop=True)
@@ -149,7 +182,7 @@ def perform_statistical_tests(dataframe, group_column, variable_columns_range, n
     WilcoxonTestResults = namedtuple('WilcoxonTestResults', ['column', 'wilcoxon_stat', 'p_value', 'adj_p_value', 'df', 'ci_95_low', 'ci_95_high', 'ci_99_low', 'ci_99_high', 'test_type', 'median_diff', 'margin_of_err95', 'margin_of_err99', 'point_estimate_ci_95', 'point_estimate_ci_99'])
 
     results = []
-    numerical_p_values = []
+    continuous_p_values = []
 
     # Loop through variable columns
     for col in dataframe.iloc[:, variable_columns_range:].columns:
@@ -178,7 +211,7 @@ def perform_statistical_tests(dataframe, group_column, variable_columns_range, n
             df = len(control_col) - 1
 
             # Accumulate p-values for Wilcoxon tests
-            numerical_p_values.append(p_value)
+            continuous_p_values.append(p_value)
 
             # margin of error calculation:
             margin_of_err95 = (ci_bounds[95][1] - ci_bounds[95][0]) / 2
@@ -212,8 +245,8 @@ def perform_statistical_tests(dataframe, group_column, variable_columns_range, n
                 print(f"Column: {col} - 'confidence_interval' method is not available. Update SciPy or use an alternative method.")
                 continue
 
-            # Accumulate p-values for numerical tests
-            numerical_p_values.append(l.pvalue)
+            # Accumulate p-values for continuous tests
+            continuous_p_values.append(l.pvalue)
 
                     # margin of error calculation:
             margin_of_err95 = (ci_95.high - ci_95.low) / 2
@@ -229,32 +262,24 @@ def perform_statistical_tests(dataframe, group_column, variable_columns_range, n
                                       formatted_ci_95, formatted_ci_99
                                       ))
 
-    # Accumulate all p-values from both numerical and categorical tests
-    all_p_values = numerical_p_values
+    # Accumulate all p-values from both continuous and categorical tests
+    all_p_values = continuous_p_values
 
     # Apply Hochberg correction to the combined p-values
     adj_all_p_values = false_discovery_control(all_p_values, method='bh')
 
-    # Separate the adjusted p-values back into numerical and categorical
-    adj_numerical_p_values = adj_all_p_values[:len(numerical_p_values)]
+    # Separate the adjusted p-values back into continuous and categorical
+    adj_continuous_p_values = adj_all_p_values[:len(continuous_p_values)]
 
     # Assign the adjusted p-values back to the results
     for i in range(len(results)):
-        results[i] = results[i]._replace(adj_p_value=adj_numerical_p_values[i])
+        results[i] = results[i]._replace(adj_p_value=adj_continuous_p_values[i])
 
     # Convert results into a DataFrame
     results_df = pd.DataFrame(results)
 
     return results_df
 
-# # Example usage for oa_inc_matched_df
+# Example usage for oa_inc_matched_df
 # non_norm_columns_oa_inc = oa_inc_matched_df.iloc[:,-110:].columns.tolist()
 # results_df_oa_inc = perform_statistical_tests(oa_inc_matched_df, 'oa_prog', -110, non_norm_columns_oa_inc)
-
-# # Example usage for tkr_matched_df
-# non_norm_columns_tkr = tkr_matched_df.iloc[:,-110:].columns.tolist()
-# results_df_tkr = perform_statistical_tests(tkr_matched_df, 'tkr', -110, non_norm_columns_tkr)
-
-# Optionally, save results to Excel
-# results_df_oa_inc.to_excel("publish_dataframes/OA_Inc_meanDifference_wilcoxon_hochbergCorrected_results.xlsx", index=False)
-# results_df_tkr.to_excel("publish_dataframes/TKR_meanDifference_wilcoxon_hochbergCorrected_results.xlsx", index=False)
