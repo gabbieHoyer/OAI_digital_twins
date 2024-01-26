@@ -53,8 +53,8 @@ def twin_match():
     # ****************** Sensitivity Analysis ****************** #
     # Sensitivity Test to evaluate the effects of our imputation method
     # File path for the Excel output
-    # excel_file_path = 'publish_dataframes/tkr_ks_test_results.xlsx'
-    # excel_file_path = 'publish_dataframes/oa_inc_ks_test_results.xlsx'
+    # excel_file_path = 'tkr_ks_test_results.xlsx'
+    # excel_file_path = 'oa_inc_ks_test_results.xlsx'
 
     # Use the function for 'tkr' column and save results to Excel
     # columns_to_test = df_imputed_tkr.columns[7:-110].tolist()
