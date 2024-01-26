@@ -82,38 +82,3 @@ def find_closest_pairs(df, target_col, dist_df, id_col):
 
 
 
-#**********
-tsne_params = {'n_components': 3, 'perplexity': 50, 'n_iter': 4000}
-
-transformed_oa_inc_control = pd.read_csv('publish_dataframes/control_oa_inc_standardized_df.csv')
-
-df = transformed_oa_inc_control
-target_col = 'oa_prog'    # target column
-tsne_cols = slice(7, 27)  # column slice for t-SNE
-
-# Perform t-SNE transformation
-tsne_df = perform_tsne(df, tsne_cols, tsne_params)
-
-# Calculate distances
-dist_df = calculate_distances(tsne_df, 'id')
-
-# Find closest pairs
-matched_oa_inc_df = find_closest_pairs(df, target_col, dist_df, 'id')
-
-#**************
-tsne_params = {'n_components': 3, 'perplexity': 50, 'n_iter': 4000}
-
-transformed_tkr = pd.read_csv('publish_dataframes/tkr_standardized_df.csv')
-
-df = transformed_tkr
-target_col = 'tkr'    # target column
-tsne_cols = slice(7, 27)  # column slice for t-SNE
-
-# Perform t-SNE transformation
-tsne_df = perform_tsne(df, tsne_cols, tsne_params)
-
-# Calculate distances
-dist_df = calculate_distances(tsne_df, 'id')
-
-# Find closest pairs
-matched_tkr_df = find_closest_pairs(df, target_col, dist_df, 'id')

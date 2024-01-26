@@ -8,28 +8,6 @@ import statsmodels.api as sm
 from sklearn.utils import resample, shuffle
 from memory_profiler import profile
 
-
-def filter_covariates(dataframe, target, confounders, slice_start):
-    """
-    Filters a DataFrame to include specific covariates based on the provided target and confounders.
-
-    Parameters:
-    dataframe (pd.DataFrame): The DataFrame to be filtered.
-    target (str): The name of the target variable.
-    confounders (list): A list of column names to be excluded as confounders.
-
-    Returns:
-    pd.DataFrame: A DataFrame filtered to include the desired covariates.
-    """
-    # Extracting covariates (excluding the columns specified in confounders)
-    # and including the target variable
-    covariates = [col for col in dataframe.columns[slice_start:] if col not in confounders] + [target]
-
-    # Creating a new DataFrame with the selected covariates
-    filtered_df = dataframe[covariates]
-
-    return filtered_df
-
 def save_checkpoint(data, filename):
     with open(filename, 'wb') as f:
         pickle.dump(data, f)
