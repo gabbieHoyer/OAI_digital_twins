@@ -1,4 +1,4 @@
-# [Title of Your Project]
+# [Title of Project]
 
 ## Overview
 This project addresses the complexities of Osteoarthritis (OA) through a robust observational approach. Our study focuses on identifying and operationalizing biomarkers predictive of clinical outcomes in OA. We utilize advanced statistical and machine learning techniques, including t-Distributed Stochastic Neighbor Embedding (t-SNE), Elastic Net, and General Linear Models, combined with deep learning and PCA for comprehensive analysis of knee joint morphology.
@@ -35,11 +35,8 @@ This codebase is structured into several parts, each handling different aspects 
 - How to run the statistical analysis and interpret results.
 - `python statistical_analysis.py`
 
-## Contributing
-Contributions to this project are welcome. Please submit a pull request or open an issue for bug reports and feature suggestions.
-
 ## Authors
-- [Your Name] - *Initial work* - [Your Contact Information or GitHub Profile]
+- [Name] - *Initial work* - [Contact Information or GitHub Profile]
 
 ## Acknowledgments
 - [Collaborators]
@@ -47,7 +44,7 @@ Contributions to this project are welcome. Please submit a pull request or open 
 - [Any other acknowledgments]
 
 ## License
-This project is licensed under the [Your License Name] - see the LICENSE.md file for details.
+This project is licensed under the [Name] - see the LICENSE.md file for details.
 
 ## Publications
 For more details on our research, refer to our publication: [Publication Title](link to the publication)
