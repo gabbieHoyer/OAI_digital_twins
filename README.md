@@ -1,14 +1,9 @@
-# [Title of Project]
+# OAI Imaging Biomarkers / step toward Digital Twins
 
 ## Overview
 This project addresses the complexities of Osteoarthritis (OA) through a robust observational approach. Our study focuses on identifying and operationalizing biomarkers predictive of clinical outcomes in OA. We utilize advanced statistical and machine learning techniques, including t-Distributed Stochastic Neighbor Embedding (t-SNE), Elastic Net, and General Linear Models, combined with deep learning and PCA for comprehensive analysis of knee joint morphology.
 
 ## Getting Started
-
-### Prerequisites
-- Python 3.x
-- Relevant Python packages (e.g., numpy, pandas, scikit-learn, TensorFlow)
-- [Other prerequisites or dependencies]
 
 ### Installation
 To set up this project on your local machine, follow these steps:
@@ -36,16 +31,25 @@ This codebase is structured into several parts, each handling different aspects 
 - `python statistical_analysis.py`
 
 ## Authors
-- [Name] - *Initial work* - [Contact Information or GitHub Profile]
+- Gabrielle Hoyer: (https://gabbiehoyer.github.io/)
+
+## Publication
+For more details on our research, refer to our preprint: Deciphering Osteoarthritis Progression and Knee Replacement Biomarkers: A Digital Twin Analysis via qMRI (https://doi.org/10.21203/rs.3.rs-4317958/v1)
 
 ## Acknowledgments
-- [Collaborators]
-- [Funding Agencies]
-- [Any other acknowledgments]
+- Department of Radiology and Biomedical Imaging, University of California, San Francisco
+- Department of Bioengineering, University of California, Berkeley
+- Department of Bioengineering, University of California, San Francisco
 
-## License
-This project is licensed under the [Name] - see the LICENSE.md file for details.
+## Reference
 
-## Publications
-For more details on our research, refer to our publication: [Publication Title](link to the publication)
+```
+@article{Hoyer2024Deciphering,
+  title={Deciphering Osteoarthritis Progression and Knee Replacement Biomarkers: A Digital Twin Analysis via qMRI},
+  author={Hoyer, Gabrielle and Majumdar, Sharmila and Pedoia, Valentina},
+  journal={Research Square},
+  year={2024},
+  note={Preprint at https://doi.org/10.21203/rs.3.rs-4317958/v1}
+}
 
+```
