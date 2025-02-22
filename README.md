@@ -24,20 +24,20 @@ To set up this project on your local machine, follow these steps:
 This codebase is divided into separate scripts for different tasks. If you prefer an interactive approach, see the example notebooks in the `notebooks` folder:
 
 1. **Data Processing and Statistical Cohort Matching**:
-```bash
- python scripts/twin_match.py
-```
+  ```bash
+  python scripts/twin_match.py
+  ```
 2. **Validate Cohort Match Quality**:
-```bash
-python scripts/match_eval.py
-```
+  ```bash
+  python scripts/match_eval.py
+  ```
 3. **Feature Selection and Multivariate Regression**:
-```bash
-python scripts/statistical_modeling.py
-```
+  ```bash
+  python scripts/statistical_modeling.py
+  ```
 
 ## Authors
-- Gabrielle Hoyer: (https://gabbiehoyer.github.io/)
+Gabrielle Hoyer: (https://gabbiehoyer.github.io/)
 
 ## Publication
 For more details on this work, refer to our publication:
@@ -47,12 +47,13 @@ Foundations of a knee joint digital twinfrom qMRI biomarkers for osteoarthritisa
 
 ```bibtex
 @article{Hoyer2025Foundations,
-  title        = {Foundations of a knee joint digital twin from qMRI biomarkers for osteoarthritis and knee replacement},
-  author       = {Hoyer, Gabrielle and Gao, K.T. and Gassert, F.G. et al.},
-  journal      = {npj Digit. Med.},
-  volume       = {8},
-  pages        = {118},
-  year         = {2025},
-  doi          = {10.1038/s41746-025-01507-3}
+  title  = {Foundations of a knee joint digital twin from qMRI biomarkers for osteoarthritis and knee replacement},
+  author = {Hoyer, Gabrielle and Gao, K.T. and Gassert, F.G. and Luitjens, J. and Jiang, F. and Majumdar, S. and Pedoia, V.},
+  journal = {npj Digit. Med.},
+  volume = {8},
+  number = {1},
+  pages  = {1--15},
+  year   = {2025},
+  doi    = {10.1038/s41746-025-01507-3}
 }
 ```
